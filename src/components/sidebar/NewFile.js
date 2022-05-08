@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import '../../styles/NewFile.css'
-
 import AddIcon from '@material-ui/icons/Add';
 
 import firebase from 'firebase'
@@ -8,6 +7,7 @@ import { storage, db } from '../../firebase'
 
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
+import { Button } from '@material-ui/core';
 
 function getModalStyle() {
     return {
@@ -22,7 +22,8 @@ const useStyles = makeStyles((theme) => ({
         position: 'absolute',
         width: 400,
         backgroundColor: theme.palette.background.paper,
-        border: '2px solid #000',
+        // border: '2px solid #000',
+        borderRadius: '7px',
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
     },
@@ -65,6 +66,7 @@ const NewFile = () => {
                     caption: file.name,
                     fileUrl: url,
                     size: snapshot._delegate.bytesTransferred,
+                    type : snapshot.metadata.contentType
                 })
 
                 setUploading(false)
@@ -99,8 +101,9 @@ const NewFile = () => {
                             <p>Uploading...</p>
                         ) : (
                                 <>
-                                    <input type="file" onChange={handleChange} />
-                                    <button onClick={handleUpload}>Upload</button>
+                                    <input style={{backgroundColor : 'white', borderRadius : '9px', fontSize:'16px', padding:'7px'}} type="file" onChange={handleChange} />
+                                    <Button variant='contained' onClick={handleUpload} size='small' color='primary' fontSize='11px'> Upload</Button>
+                                    {/* <button  onClick={handleUpload}>Upload</button> */}
                                 </>
                             )
                     }

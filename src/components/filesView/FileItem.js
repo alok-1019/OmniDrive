@@ -1,12 +1,14 @@
 import React from 'react'
 import '../../styles/FileItem.css'
+import Button from '@material-ui/core/Button'
+import { db } from '../../firebase'
 
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 
 const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 const FileItem = ({ id, caption, timestamp, fileUrl, size }) => {
-    const fileDate = `${timestamp?.toDate().getDate()} ${monthNames[timestamp?.toDate().getMonth() + 1]} ${timestamp?.toDate().getFullYear()}`
+    const fileDate = `${timestamp?.toDate().getHours() + ':' + timestamp?.toDate().getMinutes() + ',' + '\xa0\xa0'} ${timestamp?.toDate().getDate()} ${monthNames[timestamp?.toDate().getMonth()]} ${timestamp?.toDate().getFullYear()}`
 
     const getReadableFileSizeString = (fileSizeInBytes) => {
         let i = -1;
@@ -19,19 +21,29 @@ const FileItem = ({ id, caption, timestamp, fileUrl, size }) => {
         return Math.max(fileSizeInBytes, 0.1).toFixed(1) + byteUnits[i];
     };
 
+
     return (
         <div className='fileItem'>
-            <a href={fileUrl} target="_blank" download>
+            <a href={fileUrl} target="_blank" rel="noreferrer" download>
                 <div className="fileItem--left">
                     <InsertDriveFileIcon />
                     <p>{caption}</p>
                 </div>
-                <div className="fileItem--right">
-                    <p>{fileDate}</p>
-                    <p>{getReadableFileSizeString(size)}</p>
-                </div>
             </a>
-        </div>
+            <div className="fileItem--right">
+                <p style={{ marginRight: 33 , paddingLeft : 12}}>{fileDate}</p>
+                <p style={{ marginRight: 33 }}>{getReadableFileSizeString(size)}</p>
+                <Button
+                    className="fileItem--right"
+                    variant="contained"
+                    onClick={event => db.collection("myFiles").doc(id).delete()}
+                >
+                    Delete
+                </Button>
+
+            </div>
+
+        </div >
     )
 }
 
